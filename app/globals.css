@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  FONT STRATEGY
+  -------------
+  Primary: "Satoshi" — loaded from Fontshare's free CDN in app/layout.jsx
+           (real Satoshi, free for commercial use).
+  Fallback: "Hanken Grotesk" — bundled locally below so the layout still
+            renders in Satoshi's exact spirit if the CDN is blocked
+            (e.g. offline preview). In production Satoshi loads first.
+  Swap: to self-host Satoshi instead of the CDN, drop the Satoshi woff2
+        files into /public/fonts and replace the @font-face blocks below.
+*/
+
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/hanken-300.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/hanken-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/hanken-500.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/hanken-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/hanken-900.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url("/fonts/hanken-400-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  src: url("/fonts/hanken-500-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url("/fonts/hanken-700-italic.woff2") format("woff2");
+}
+
+:root {
+  --ink: #0d0d0d;
+  --paper: #fdfdfd;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: "Satoshi", "Hanken Grotesk", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smoothing */
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Slim, dark scrollbar to suit the aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #232323;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+
+/* Lenis recommended styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+::selection {
+  background: #006b3c;
+  color: #fdfdfd;
+}
+
+/* Blinking caret for the typewriter subtitle */
+@keyframes caretBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.caret {
+  display: inline-block;
+  width: 0.06em;
+  margin-left: 0.06em;
+  background: currentColor;
+  animation: caretBlink 1s step-end infinite;
+}
+
+/* Animated green gradient warping across a word (e.g. "gradients") */
+@keyframes greenWarp {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.green-warp {
+  background-image: linear-gradient(
+    100deg,
+    #0a3d24,
+    #006b3c,
+    #1fae6b,
+    #4ade80,
+    #006b3c,
+    #0a3d24
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: greenWarp 6s ease-in-out infinite;
+}
+
+/* Softly blurred words (e.g. "a hundred pitches") — defocused but legible.
+   Sharpens on hover for a subtle interactive touch. */
+.blur-word {
+  filter: blur(0.06em);
+  opacity: 0.92;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+}
+.blur-word:hover {
+  filter: blur(0);
+  opacity: 1;
+}
+
+/* Softly-blurred phrase — reads as "out of focus", gently pulsing */
+@keyframes blurPulse {
+  0%, 100% { filter: blur(2.4px); opacity: 0.78; }
+  50%      { filter: blur(1.2px); opacity: 1; }
+}
+.blur-word {
+  display: inline-block;
+  animation: blurPulse 3.6s ease-in-out infinite;
+}
+
+/* Logo marquee — seamless auto-scroll (track holds two copies, shifts 50%) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
