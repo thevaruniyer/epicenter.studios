@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   motion,
   AnimatePresence,
@@ -8,12 +9,14 @@ import {
   useTransform,
 } from "framer-motion";
 
-// Studio, Work, then Contact. Contact points to the real contact details
+// Work, Studio, Contact, then About. Hash links resolve to sections on the
+// homepage; About is its own route. Contact points to the real contact details
 // in the footer (#contact), not the closing quote.
 const LINKS = [
-  { label: "Studio", href: "#studio" },
   { label: "Work", href: "#work" },
+  { label: "Studio", href: "#studio" },
   { label: "Contact", href: "#contact" },
+  { label: "About", href: "/about" },
 ];
 
 export default function Header() {
@@ -26,11 +29,27 @@ export default function Header() {
   const blurAmount = useTransform(scrollY, [0, 80], [0, 10]);
   const backdrop = useTransform(blurAmount, (b) => `blur(${b}px)`);
 
+  const pathname = usePathname();
+  const router = useRouter();
+
   const handleNav = (e, href) => {
     e.preventDefault();
     setOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+
+    // Route links (e.g. /about) — just navigate.
+    if (href.startsWith("/")) {
+      router.push(href);
+      return;
+    }
+
+    // Hash links — smooth-scroll if we're already on the homepage, otherwise
+    // go home and let the browser resolve the anchor.
+    if (pathname === "/") {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      router.push("/" + href);
+    }
   };
 
   return (
