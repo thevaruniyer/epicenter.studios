@@ -1,5 +1,6 @@
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
   title: "Epicenter Studios, Built to be seen",
@@ -38,6 +39,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <SmoothScroll>{children}</SmoothScroll>
+        <Analytics />
       </body>
     </html>
   );
